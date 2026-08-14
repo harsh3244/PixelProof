@@ -1,9 +1,10 @@
-import { extractOcrText, rotateImageFile } from "./ocr.js?v=2.1.0";
-import { detectFaceInImage } from "./faceDetection.js?v=2.1.0";
-import { analyzeImageQuality, evaluateDocumentScreening } from "./scoring.js?v=2.1.0";
+import { extractOcrText, rotateImageFile } from "./ocr.js?v=2.5.1";
+import { detectFaceInImage } from "./faceDetection.js?v=2.5.1";
+import { analyzeImageQuality, evaluateDocumentScreening } from "./scoring.js?v=2.5.1";
 
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "application/pdf"]);
+const STORAGE_KEY_NAME = "pixelproof_holder_name";
 
 const state = {
   file: null,
@@ -36,6 +37,27 @@ const docTypeTabs = document.getElementById("docTypeTabs");
 const imageControls = document.getElementById("imageControls");
 const rotateLeftBtn = document.getElementById("rotateLeftBtn");
 const rotateRightBtn = document.getElementById("rotateRightBtn");
+
+// Initialize Holder Name from Browser Memory Cache
+function initHolderName() {
+  if (!fullNameInput) return;
+  const cachedName = localStorage.getItem(STORAGE_KEY_NAME);
+  if (cachedName) {
+    fullNameInput.value = cachedName;
+  } else {
+    fullNameInput.value = "Harshvardhan Hajgude";
+    localStorage.setItem(STORAGE_KEY_NAME, "Harshvardhan Hajgude");
+  }
+
+  fullNameInput.addEventListener("input", (e) => {
+    const val = e.target.value;
+    if (val.trim()) {
+      localStorage.setItem(STORAGE_KEY_NAME, val.trim());
+    }
+  });
+}
+
+initHolderName();
 
 function setStatus(message, tone) {
   if (!statusMessage) return;
@@ -72,6 +94,13 @@ function resetState() {
   state.analyzing = false;
   state.rotationAngle = 0;
   revokePreviewUrl();
+
+  // Remove name from Browser Cache Memory on Reset
+  localStorage.removeItem(STORAGE_KEY_NAME);
+  if (fullNameInput) {
+    fullNameInput.value = "";
+  }
+
   if (previewImage) {
     previewImage.src = "";
     previewImage.style.transform = "rotate(0deg)";
@@ -80,7 +109,7 @@ function resetState() {
   if (imageControls) imageControls.style.display = "none";
   if (fileInput) fileInput.value = "";
   clearResultUI();
-  setStatus("");
+  setStatus("Form and browser memory reset.", "success");
 }
 
 function updatePreview(file) {
@@ -217,6 +246,9 @@ async function analyzeCurrentImage() {
     return;
   }
 
+  // Save to browser memory cache on analyze
+  localStorage.setItem(STORAGE_KEY_NAME, enteredName);
+
   state.analyzing = true;
   if (analyzeBtn) analyzeBtn.disabled = true;
   setStatus("Analyzing document (Auto-detecting photo angle)...");
@@ -274,7 +306,7 @@ async function loadSamplePreset(docType) {
     state.selectedDocType = docType;
   }
 
-  let holderName = "Prajyot Vijay Mestry";
+  let holderName = localStorage.getItem(STORAGE_KEY_NAME) || "Harshvardhan Hajgude";
   if (fullNameInput) fullNameInput.value = holderName;
 
   const canvas = document.createElement("canvas");
@@ -371,20 +403,19 @@ async function loadSamplePreset(docType) {
     ctx.fillRect(0, 0, canvas.width, 70);
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 22px sans-serif";
-    ctx.fillText("GOVERNMENT POLYTECHNIC", 40, 45);
+    ctx.fillText("QUANTUM CODERS", 40, 45);
 
     ctx.fillStyle = "#0f172a";
     ctx.font = "bold 18px sans-serif";
-    ctx.fillText("Student Identity Card / Academic Year 2025-2026", 40, 110);
+    ctx.fillText("CERTIFICATE OF MEMBERSHIP", 40, 110);
 
     ctx.fillStyle = "#334155";
     ctx.fillRect(50, 130, 150, 190);
 
     ctx.font = "bold 22px sans-serif";
-    ctx.fillText(`Student Name: ${holderName}`, 230, 160);
-    ctx.fillText("Roll No: 2025CS1001", 230, 200);
-    ctx.fillText("Programme: AIML / CS", 230, 240);
-    ctx.fillText("Valid Upto: JUNE 2028", 230, 280);
+    ctx.fillText(`Member Name: ${holderName}`, 230, 160);
+    ctx.fillText("Certificate No: QC-2026-0055", 230, 200);
+    ctx.fillText("Official Member of Quantum Coders", 230, 240);
   }
 
   const blob = await new Promise((res) => canvas.toBlob(res, "image/png"));

@@ -1,20 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="PixelProof macOS Liquid Glass - Client-side identity document verification workspace supporting Aadhaar, Driving License, Voter ID, Passport, and Student ID Cards."
+      content="PixelProof - Enterprise identity document verification engine supporting Aadhaar, Driving License, Voter ID, Passport, Student ID Cards, and Certificates."
     />
-    <title>PixelProof | macOS Liquid Glass Identity Workspace</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>PixelProof | Identity Verification Workspace</title>
+    <link rel="stylesheet" href="styles.css?v=2.5.1" />
   </head>
   <body>
     <main class="page-shell">
-      <!-- macOS Window Toolbar Navbar -->
+      <!-- Navbar Toolbar -->
       <header class="navbar">
-        <div style="display:flex;align-items:center;gap:18px;">
+        <div style="display:flex;align-items:center;gap:16px;">
           <div class="mac-traffic-lights">
             <span class="mac-dot close"></span>
             <span class="mac-dot minimize"></span>
@@ -25,7 +25,7 @@
             <div class="brand-icon">P</div>
             <div>
               <span class="brand-name">PixelProof</span>
-              <span class="brand-tag">Liquid Glass v2.1</span>
+              <span class="brand-tag">v2.5.1 Engine</span>
             </div>
           </a>
         </div>
@@ -39,7 +39,7 @@
         </div>
       </header>
 
-      <!-- macOS Liquid Glass Hero Card -->
+      <!-- Hero Workspace Card -->
       <section class="hero-card">
         <div class="hero-content">
           <h1>Enterprise Identity <span>Verification Engine</span></h1>
@@ -53,7 +53,7 @@
             <span class="doc-chip">&bull; Driving Licence</span>
             <span class="doc-chip">&bull; Voter ID (EPIC)</span>
             <span class="doc-chip">&bull; Passport</span>
-            <span class="doc-chip">&bull; Student ID Card</span>
+            <span class="doc-chip">&bull; Student ID / Certificate</span>
           </div>
 
           <div class="hero-actions">
@@ -84,7 +84,7 @@
               <span>&rarr;</span>
             </button>
             <button class="sample-btn" type="button" data-preset="student">
-              <span>&#127891; Student ID Card Sample</span>
+              <span>&#127891; Student ID / Certificate</span>
               <span>&rarr;</span>
             </button>
           </div>
@@ -93,22 +93,22 @@
 
       <!-- Footer -->
       <footer class="site-footer">
-        <p>&copy; 2026 PixelProof macOS Liquid Glass Identity Workspace. Harshvardhan Hajgude.</p>
+        <p>&copy; 2026 PixelProof Identity Verification Workspace. Harshvardhan Hajgude.</p>
       </footer>
     </main>
 
-    <!-- macOS Liquid Glass Verification Inspector Modal -->
+    <!-- Verification Inspector Modal -->
     <div id="verificationOverlay" class="overlay hidden" aria-hidden="true">
       <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <header class="modal-header">
-          <div style="display:flex;align-items:center;gap:16px;">
+          <div style="display:flex;align-items:center;gap:14px;">
             <div class="mac-traffic-lights">
               <span class="mac-dot close" id="macCloseDot" style="cursor:pointer;"></span>
               <span class="mac-dot minimize"></span>
               <span class="mac-dot expand"></span>
             </div>
             <h2 id="modalTitle">
-              <span class="brand-icon" style="width:26px;height:26px;font-size:0.85rem;">P</span>
+              <span class="brand-icon" style="width:24px;height:24px;font-size:0.8rem;">P</span>
               Document Verification Inspector
             </h2>
           </div>
@@ -128,7 +128,7 @@
                 <button type="button" class="doc-tab" data-type="dl">Driving Lic.</button>
                 <button type="button" class="doc-tab" data-type="voter">Voter ID</button>
                 <button type="button" class="doc-tab" data-type="passport">Passport</button>
-                <button type="button" class="doc-tab" data-type="student">Student ID</button>
+                <button type="button" class="doc-tab" data-type="student">Student/Cert.</button>
               </div>
             </div>
 
@@ -140,7 +140,6 @@
                 type="text"
                 placeholder="Enter full name printed on document"
                 autocomplete="name"
-                value="Prajyot Vijay Mestry"
               />
             </div>
 
@@ -201,6 +200,6 @@
       </section>
     </div>
 
-    <script type="module" src="script.js?v=2.1.0"></script>
+    <script type="module" src="script.js?v=2.5.1"></script>
   </body>
 </html>
