@@ -1,124 +1,84 @@
-# Aadhaar Document Screening Demo
+# PixelProof | High-Precision Document Verification Engine
 
-This is a fully client-side verification demo built with plain HTML, CSS, and JavaScript. It screens an uploaded document in the browser using local OCR, local face detection, and lightweight heuristics to produce a demo verdict.
+**PixelProof** is a client-side document verification and screening engine built with HTML5, CSS3, and JavaScript. It analyzes uploaded identity documents (such as Aadhaar cards, identity badges, and certificates) directly inside the user's browser using Tesseract.js OCR, mathematical **Verhoeff Checksum validation**, canvas portrait feature detection, and multi-token fuzzy matching.
 
-Important: this is a screening demo only. It is not official Aadhaar verification and should not be presented as a legal or government identity check.
+---
 
-## What It Does
+## Key Features
 
-The app opens as a modal widget that can be embedded into any regular web page. A user enters their name, uploads an image or PDF, and the browser analyzes the file locally.
+- **100% Client-Side Privacy**: All OCR, face detection, Verhoeff checksum validation, and quality analysis run locally in browser memory. No private documents are uploaded to third-party servers.
+- **Verhoeff Checksum Engine**: Mathematically validates extracted 12-digit Aadhaar number sequences using the $D_5$ dihedral group algorithm and performs smart digit repair for common OCR mistranslations (`O` $\rightarrow$ `0`, `I`/`l` $\rightarrow$ `1`, `S` $\rightarrow$ `5`, `B` $\rightarrow$ `8`).
+- **Multi-Token Fuzzy Name Matching**: Handles name order swaps ("Rahul Kumar" vs "Kumar Rahul"), middle names, initials ("K. S. Sharma"), and minor OCR typos.
+- **Canvas Image Preprocessing Pipeline**: Automatically applies contrast stretch, grayscale normalization, and edge sharpening before passing image blobs to Tesseract OCR.
+- **Multi-Strategy Portrait/Face Fallback**: Combines browser native `FaceDetector` API with an automated Canvas YCbCr skin-tone cluster & contour feature detector to ensure face presence verification works across all browsers (including Safari, Firefox, and standard Chrome).
+- **PixelProof Studio UI**: Modern dark-mode aesthetic with glowing accents, animated upload dropzone scanning line, step-by-step progress timeline, and comprehensive diagnostic report breakdown.
+- **PDF & Multi-Format Support**: Native support for JPG, PNG, WEBP, and PDF documents (renders page 1 to Canvas automatically).
+- **Interactive Sample Presets**: Includes instant synthetic document generators for valid documents, name mismatch tests, blurry scans, and non-Aadhaar files.
 
-The current flow is:
+---
 
-1. User opens the verification popup.
-2. User enters the full name printed on the document.
-3. User uploads a JPG, PNG, WEBP, or PDF file.
-4. The app runs OCR, face detection, and image-quality checks in the browser.
-5. A weighted heuristic score is calculated and mapped to a final demo verdict.
+## System Architecture
 
-## Main Features
+```text
+PixelProof Engine Architecture
+├── index.html            # PixelProof Studio UI & Inspector Modal
+├── styles.css            # Dark Glassmorphism CSS Design System & Animations
+├── script.js            # PixelProof Controller, PDF renderer, & Preset Generator
+├── scoring.js           # Verhoeff Engine, Multi-Token Name Matching, & Score Heuristics
+├── ocr.js               # Preprocessed Canvas OCR Engine (Tesseract.js wrapper)
+└── faceDetection.js     # Native FaceDetector + Canvas YCbCr Portrait Fallback Engine
+```
 
-- Modal popup with overlay and responsive layout.
-- Drag-and-drop upload plus file picker support.
-- PDF support through first-page conversion before analysis.
-- Local OCR using Tesseract.js with English + Hindi fallback.
-- Local face detection using the browser FaceDetector API when available.
-- Image-quality heuristics for blur, glare, brightness, and resolution.
-- Fuzzy keyword matching for Aadhaar-related text.
-- Fuzzy name matching against OCR output.
-- 12-digit number detection with masked display.
-- Weighted scoring with a 0-100 confidence-style output.
-- Clear demo verdicts such as Verified, Needs Manual Review, or Not Verified.
+---
 
-## How The Analysis Works
+## Verification Logic & Scoring
 
-The logic is split across a few small files:
+PixelProof evaluates multiple signals to produce a confidence rating (0–100%):
 
-- [script.js](script.js) coordinates upload handling, PDF conversion, OCR, face detection, and result rendering.
-- [ocr.js](ocr.js) wraps Tesseract.js and normalizes extracted text and lines.
-- [faceDetection.js](faceDetection.js) uses the browser FaceDetector API, then falls back to an uncertain status if the API is unavailable.
-- [scoring.js](scoring.js) performs keyword detection, name matching, number detection, image-quality analysis, and final verdict generation.
+1. **Aadhaar Number & Verhoeff Checksum (30 pts)**: Validates 12-digit format and Verhoeff checksum ($D_5$ group multiplication).
+2. **Aadhaar & Government Keywords (35 pts)**: Identifies Hindi and English keywords ("GOVERNMENT OF INDIA", "UIDAI", "Aadhaar", "DOB", "MALE", "FEMALE", etc.).
+3. **Name Match Ratio (15 pts)**: Computes Token-Sort, Token-Set, and Levenshtein similarity against user-entered holder name.
+4. **Portrait & Face Verification (15 pts)**: Verifies facial landmarks and YCbCr skin-tone cluster density.
+5. **Layout & Image Quality (5 pts)**: Analyzes blur score, brightness, glare, and document aspect ratio.
 
-The final output is intentionally conservative. If any of the core signals are weak or unavailable, the result can downgrade to manual review or unverified instead of forcing a positive match.
+---
 
-## Tech Stack
+## Local Development
 
-- Plain HTML for the UI shell.
-- Plain CSS for layout and styling.
-- Plain JavaScript modules for behavior.
-- Tesseract.js for OCR.
-- PDF.js for PDF-to-image conversion.
-- Native browser FaceDetector API when supported.
-
-## Local Setup
-
-Run the static server:
+Start the dev server:
 
 ```bash
 npm run dev
 ```
 
-Then open:
+Then open in your browser:
 
 ```text
 http://localhost:5500
 ```
 
-For the alternate port:
+---
 
-```bash
-npm start
+## JavaScript Integration API
+
+Embed PixelProof into any web application:
+
+```javascript
+// Open verification modal
+PixelProof.openModal();
+
+// Close verification modal
+PixelProof.closeModal();
+
+// Run verification programmatically
+PixelProof.verify();
+
+// Load instant synthetic sample case
+PixelProof.loadSamplePreset('clear-aadhaar');
 ```
 
-## Live Demo
-
-The project is hosted on GitHub Pages here:
-
-https://harsh3244.github.io/Verification-system/
-
-## Embedding
-
-You can embed the widget into any HTML page and open it from a button or script call.
-
-```html
-<button onclick="openVerificationModal()">Verify Aadhaar</button>
-```
-
-The global functions exposed by the app are:
-
-- `openVerificationModal()`
-- `closeVerificationModal()`
-
-## Repository Structure
-
-```text
-index.html
-styles.css
-script.js
-ocr.js
-faceDetection.js
-scoring.js
-eng.traineddata
-hin.traineddata
-demo/
-public/
-```
-
-## Data And Safety Notes
-
-- Files are processed in browser memory only.
-- No API key is required by default.
-- No permanent document storage is implemented.
-- Full Aadhaar numbers are not shown back in the UI.
-- The widget limits uploads to JPG, PNG, WEBP, and PDF files up to 10 MB.
-
-## Known Limitations
-
-- Verdicts are heuristic and can produce false positives or false negatives.
-- Face detection depends on browser support for the FaceDetector API.
-- OCR quality depends on image clarity, lighting, and scan quality.
-- This project should be treated as a demo or prototype, not a compliance-grade identity system.
+---
 
 ## License
 
-See [LICENSE](LICENSE) for the project license.
+MIT License. Developed by Harshvardhan Hajgude.

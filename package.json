@@ -1,6 +1,8 @@
 {
-  "name": "aadhaar-document-screening-demo",
-  "version": "0.1.0",
+  "name": "pixelproof-document-verification-engine",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "High-precision, client-side document verification engine with browser OCR, Verhoeff checksum validation, and face detection.",
   "private": true,
   "scripts": {
     "dev": "python3 -m http.server 5500",

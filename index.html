@@ -5,95 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Client-side Aadhaar document screening demo with browser OCR, face detection, and scoring."
+      content="PixelProof macOS Liquid Glass - Client-side identity document verification workspace supporting Aadhaar, Driving License, Voter ID, Passport, and Student ID Cards."
     />
-    <title>Aadhaar Document Screening Demo | Harshvardhan Hajgude</title>
+    <title>PixelProof | macOS Liquid Glass Identity Workspace</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="page-shell">
-      <section class="hero-card">
-        <p class="eyebrow">Client-side verification demo</p>
-        <h1>Aadhaar Document Screening Demo</h1>
-        <p class="lead">
-          Heuristic-only screening in the browser with local OCR and local face detection.
-          No paid API, no API key, no official verification claims.
-        </p>
-        <div class="hero-banner">
-          <span class="hero-banner-label">Live demo</span>
-          <a href="https://harsh3244.github.io/Verification-system/" target="_blank" rel="noreferrer">
-            Hosted on GitHub Pages
+      <!-- macOS Window Toolbar Navbar -->
+      <header class="navbar">
+        <div style="display:flex;align-items:center;gap:18px;">
+          <div class="mac-traffic-lights">
+            <span class="mac-dot close"></span>
+            <span class="mac-dot minimize"></span>
+            <span class="mac-dot expand"></span>
+          </div>
+
+          <a href="#" class="brand-logo">
+            <div class="brand-icon">P</div>
+            <div>
+              <span class="brand-name">PixelProof</span>
+              <span class="brand-tag">Liquid Glass v2.1</span>
+            </div>
           </a>
         </div>
-        <div class="hero-actions">
-          <button class="primary" onclick="openVerificationModal()">Verify Aadhaar</button>
-          <button class="secondary" id="openFromScriptBtn">Open via JS</button>
+
+        <div class="nav-actions">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            Private Browser Engine Active
+          </div>
+          <button id="navLaunchBtn" class="btn-primary" type="button">Verify Document</button>
         </div>
-        <p class="inline-code">window.openVerificationModal()</p>
+      </header>
+
+      <!-- macOS Liquid Glass Hero Card -->
+      <section class="hero-card">
+        <div class="hero-content">
+          <h1>Enterprise Identity <span>Verification Engine</span></h1>
+          <p class="hero-lead">
+            Privately screen identity documents in browser memory. Automatically validates document format, ID number checksums, portrait presence, and holder names.
+          </p>
+
+          <p class="doc-chips-title">Supported Document Types:</p>
+          <div class="doc-chips-grid">
+            <span class="doc-chip">&bull; Aadhaar Card</span>
+            <span class="doc-chip">&bull; Driving Licence</span>
+            <span class="doc-chip">&bull; Voter ID (EPIC)</span>
+            <span class="doc-chip">&bull; Passport</span>
+            <span class="doc-chip">&bull; Student ID Card</span>
+          </div>
+
+          <div class="hero-actions">
+            <button id="heroInspectBtn" class="btn-primary" type="button">
+              <span>Inspect Document</span> &rarr;
+            </button>
+            <button id="openFromScriptBtn" class="btn-secondary" type="button">API Demo</button>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <p class="doc-chips-title" style="margin-top:0;">Run Verification Presets:</p>
+          <div class="sample-cases">
+            <button class="sample-btn" type="button" data-preset="aadhaar">
+              <span>&#128196; Aadhaar Card Sample</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="sample-btn" type="button" data-preset="dl">
+              <span>&#128663; Driving Licence Sample</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="sample-btn" type="button" data-preset="voter">
+              <span>&#128077; Voter ID (EPIC) Sample</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="sample-btn" type="button" data-preset="passport">
+              <span>&#128706; Passport Sample</span>
+              <span>&rarr;</span>
+            </button>
+            <button class="sample-btn" type="button" data-preset="student">
+              <span>&#127891; Student ID Card Sample</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+        </div>
       </section>
+
+      <!-- Footer -->
+      <footer class="site-footer">
+        <p>&copy; 2026 PixelProof macOS Liquid Glass Identity Workspace. Harshvardhan Hajgude.</p>
+      </footer>
     </main>
 
+    <!-- macOS Liquid Glass Verification Inspector Modal -->
     <div id="verificationOverlay" class="overlay hidden" aria-hidden="true">
       <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <header class="modal-header">
-          <div>
-            <p class="eyebrow">Popup Screening Widget</p>
-            <h2 id="modalTitle">Aadhaar Document Screening Demo</h2>
-            <p class="subtext">
-              Demo screening only.
-            </p>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div class="mac-traffic-lights">
+              <span class="mac-dot close" id="macCloseDot" style="cursor:pointer;"></span>
+              <span class="mac-dot minimize"></span>
+              <span class="mac-dot expand"></span>
+            </div>
+            <h2 id="modalTitle">
+              <span class="brand-icon" style="width:26px;height:26px;font-size:0.85rem;">P</span>
+              Document Verification Inspector
+            </h2>
           </div>
-          <button id="closeModalBtn" class="icon-btn" aria-label="Close">x</button>
+          <button id="closeModalBtn" class="btn-close" aria-label="Close">&times;</button>
         </header>
 
         <div class="modal-body">
-          <div class="input-column">
-            <label class="field-label" for="fullNameInput">Full Name</label>
-            <input
-              id="fullNameInput"
-              type="text"
-              placeholder="As printed on the document"
-              autocomplete="name"
-            />
+          <!-- Input Controls Panel -->
+          <div class="input-panel">
+            <h3 class="panel-title">Inspection Inputs</h3>
 
-            <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload image or PDF">
+            <div class="form-group">
+              <label class="form-label">Document Type Selection</label>
+              <div class="doc-selector" id="docTypeTabs">
+                <button type="button" class="doc-tab active" data-type="auto">Auto-Detect</button>
+                <button type="button" class="doc-tab" data-type="aadhaar">Aadhaar</button>
+                <button type="button" class="doc-tab" data-type="dl">Driving Lic.</button>
+                <button type="button" class="doc-tab" data-type="voter">Voter ID</button>
+                <button type="button" class="doc-tab" data-type="passport">Passport</button>
+                <button type="button" class="doc-tab" data-type="student">Student ID</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fullNameInput">Full Name of Holder</label>
+              <input
+                id="fullNameInput"
+                class="text-input"
+                type="text"
+                placeholder="Enter full name printed on document"
+                autocomplete="name"
+                value="Prajyot Vijay Mestry"
+              />
+            </div>
+
+            <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload document image or PDF">
               <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" hidden />
-              <p class="drop-title">Drop image here or click to upload</p>
-              <p class="drop-sub">Accepted: JPG, PNG, WEBP, PDF (max 10MB)</p>
-              <img id="previewImage" class="preview hidden" alt="Uploaded preview" />
+              <div class="drop-icon">&#128194;</div>
+              <p class="drop-title">Drop document image or PDF here</p>
+              <p class="drop-sub">Supported formats: JPG, PNG, WEBP, PDF (max 10MB)</p>
+              <img id="previewImage" class="image-preview hidden" alt="Uploaded preview" />
             </div>
 
-            <div class="actions-row">
-              <button id="analyzeBtn" class="primary">Analyze</button>
-              <button id="resetBtn" class="secondary" type="button">Reset</button>
+            <div id="imageControls" style="display:none;gap:10px;justify-content:center;margin-top:8px;">
+              <button id="rotateLeftBtn" class="btn-secondary" type="button" style="padding:6px 12px;font-size:0.82rem;">
+                &#x21BA; Rotate Left (90&deg;)
+              </button>
+              <button id="rotateRightBtn" class="btn-secondary" type="button" style="padding:6px 12px;font-size:0.82rem;">
+                &#x21BB; Rotate Right (90&deg;)
+              </button>
             </div>
 
-            <p id="statusMessage" class="status" aria-live="polite"></p>
+            <div class="actions-row" style="display:flex;gap:10px;margin-top:12px;">
+              <button id="analyzeBtn" class="btn-primary" type="button" style="flex:1;">Run Verification</button>
+              <button id="resetBtn" class="btn-secondary" type="button">Reset</button>
+            </div>
+
+            <p id="statusMessage" class="status-msg" aria-live="polite"></p>
           </div>
 
-          <div class="result-column">
-            <div class="result-header">
-              <h3>Result</h3>
-              <span id="confidenceBadge" class="badge">0%</span>
+          <!-- Result Output Panel -->
+          <div class="result-panel">
+            <h3 class="panel-title">Verification Output</h3>
+
+            <div id="binaryResultCard" class="binary-result-card">
+              <div>
+                <span style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;display:block;">
+                  Verification Status
+                </span>
+                <span id="verdictText" style="font-size:1.25rem;font-weight:700;color:var(--text-main);">
+                  Awaiting Inspection
+                </span>
+              </div>
+              <span id="resultBadgePill" class="result-badge-pill pending">PENDING</span>
             </div>
-            <p id="verdictText" class="verdict">Waiting for analysis</p>
 
-            <ul id="resultFacts" class="facts"></ul>
-
-            <h4>Reasons</h4>
-            <ul id="reasonsList" class="reasons"></ul>
-
-            <p class="disclaimer">Demo screening only. This is not official Aadhaar verification.</p>
+            <div>
+              <h4 style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">
+                Identity Diagnostic Checks:
+              </h4>
+              <div id="checksContainer" class="checks-container">
+                <div class="check-row">
+                  <span class="check-icon">&bull;</span>
+                  <span>Upload document image and click 'Run Verification'.</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
       </section>
     </div>
 
-    <footer class="site-footer">
-      <p>&copy; 2026 Aadhaar Document Screening Demo. All rights reserved. Harshvardhan Hajgude</p>
-    </footer>
-
-    <script type="module" src="script.js"></script>
+    <script type="module" src="script.js?v=2.1.0"></script>
   </body>
 </html>
