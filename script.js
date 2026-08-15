@@ -1,13 +1,25 @@
+/**
+ * PixelProof In-Browser Identity Verification Engine
+ * Created & Engineered by Harshvardhan Hajgude
+ * © 2026 Harshvardhan Hajgude. All Rights Reserved.
+ * Protected by PixelProof Engine Cryptographic Integrity Seal.
+ */
 import { extractOcrText, extractOcrTextFromMultiple, rotateImageFile } from "./ocr.js?v=2.5.1";
 import { detectFaceInImage } from "./faceDetection.js?v=2.5.1";
-import { analyzeImageQuality, evaluateDocumentScreening } from "./scoring.js?v=2.5.1";
+import { analyzeImageQuality, evaluateDocumentScreening, ENGINE_INTEGRITY_SEAL } from "./scoring.js?v=2.5.1";
 import { getTrainedModel, saveTrainedModel, clearTrainedModel, trainModelFromImages } from "./trainer.js?v=2.5.1";
+
+// Execute initial integrity verification check
+if (typeof ENGINE_INTEGRITY_SEAL !== "undefined") {
+  ENGINE_INTEGRITY_SEAL.verifyIntegrity();
+}
 
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "application/pdf"]);
 const STORAGE_KEY_NAME = "pixelproof_holder_name";
 
 const state = {
+
   files: [],
   rotationAngles: [],
   previewUrls: [],

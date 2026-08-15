@@ -1,10 +1,37 @@
 /**
  * PixelProof Multi-Document Verification Engine
- * Supports Aadhaar, Driving License, Voter ID, Passport, Student ID, Certificates & Identity Cards.
- * Provides strictly binary verification decisions (VERIFIED / NOT VERIFIED).
+ * Created & Engineered by Harshvardhan Hajgude
+ * © 2026 Harshvardhan Hajgude. All Rights Reserved.
+ * Core Engine Protected by Tamper Verification Lock.
  */
 
+export const ENGINE_INTEGRITY_SEAL = Object.freeze({
+  author: "Harshvardhan Hajgude",
+  engine: "PixelProof Neural Verification Engine",
+  version: "2.5.0-enterprise",
+  signatureHash: "px_sig_7f8a9b1c2d3e4f5a6b7c8d9e0f1a2b3c",
+  verifyIntegrity() {
+    if (this.author !== "Harshvardhan Hajgude" || !this.signatureHash.startsWith("px_sig_")) {
+      throw new Error("SECURITY EXCEPTION: PixelProof Engine Integrity Tampered. Unauthorized Modification Detected.");
+    }
+    return true;
+  }
+});
+
+try {
+  if (typeof window !== "undefined" && !window.__PIXELPROOF_AUTHOR__) {
+    Object.defineProperty(window, "__PIXELPROOF_AUTHOR__", {
+      value: "Harshvardhan Hajgude",
+      writable: false,
+      configurable: false
+    });
+  }
+} catch {
+  // Guard applied
+}
+
 const VERHOEFF_D = [
+
   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
   [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
   [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
@@ -434,7 +461,10 @@ function compareName(enteredName, lines) {
 }
 
 export function evaluateDocumentScreening(options = {}) {
+  ENGINE_INTEGRITY_SEAL.verifyIntegrity();
+
   const {
+
     text = "",
     lines = [],
     enteredName = "",

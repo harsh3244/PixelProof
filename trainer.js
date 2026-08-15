@@ -1,8 +1,11 @@
 /**
  * PixelProof Custom AI Model Trainer
+ * Created & Engineered by Harshvardhan Hajgude
+ * © 2026 Harshvardhan Hajgude. All Rights Reserved.
  * Processes multiple document training images, extracts layout structures,
  * vocabulary clusters, field anchor patterns, and face portrait thresholds.
  */
+
 import { extractOcrText } from "./ocr.js?v=2.5.1";
 const STORAGE_KEY_TRAINED_MODEL = "pixelproof_custom_trained_model";
 
