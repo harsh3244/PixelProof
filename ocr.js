@@ -303,4 +303,56 @@ export async function extractOcrText(file, rotationAngle = 0) {
   }
 }
 
+/**
+ * Multi-Image Batch OCR Processor
+ * Runs OCR extraction across an array of files, returning individual and aggregated results.
+ */
+export async function extractOcrTextFromMultiple(files, rotationAngles = []) {
+  if (!files || files.length === 0) {
+    return {
+      text: "",
+      normalizedText: "",
+      lines: [],
+      confidence: 0,
+      imageResults: []
+    };
+  }
+
+  const imageResults = [];
+  let combinedTextParts = [];
+  let combinedLines = new Set();
+  let totalConfidence = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const rot = rotationAngles[i] || 0;
+    const res = await extractOcrText(file, rot);
+    imageResults.push({
+      fileName: file.name || `Image ${i + 1}`,
+      ...res
+    });
+
+    if (res.text) combinedTextParts.push(res.text);
+    if (res.lines) {
+      for (const line of res.lines) {
+        combinedLines.add(line);
+      }
+    }
+    totalConfidence += res.confidence || 0;
+  }
+
+  const combinedText = combinedTextParts.join("\n\n");
+  const mergedLines = Array.from(combinedLines);
+  const avgConfidence = Math.round(totalConfidence / files.length);
+
+  return {
+    text: combinedText,
+    normalizedText: normalizeText(combinedText),
+    lines: mergedLines,
+    confidence: avgConfidence,
+    imageResults
+  };
+}
+
 export { rotateImageFile };
+

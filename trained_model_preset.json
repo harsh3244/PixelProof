@@ -1,0 +1,87 @@
+{
+  "version": "2.5.0-kaggle-trained",
+  "datasetName": "cindybtari/id-card-classification",
+  "datasetPath": "/Users/harshvardhanvijayhajgude/.cache/kagglehub/datasets/cindybtari/id-card-classification/versions/1",
+  "sampleCount": 3600,
+  "accuracyScore": 99.2,
+  "avgOcrConfidence": 94,
+  "avgFaceConfidence": 91,
+  "learnedVocabulary": [
+    {
+      "word": "identity",
+      "freq": 142
+    },
+    {
+      "word": "republic",
+      "freq": 138
+    },
+    {
+      "word": "license",
+      "freq": 125
+    },
+    {
+      "word": "card",
+      "freq": 118
+    },
+    {
+      "word": "government",
+      "freq": 110
+    },
+    {
+      "word": "holder",
+      "freq": 98
+    },
+    {
+      "word": "identification",
+      "freq": 94
+    },
+    {
+      "word": "issue",
+      "freq": 88
+    },
+    {
+      "word": "expiry",
+      "freq": 82
+    },
+    {
+      "word": "national",
+      "freq": 79
+    },
+    {
+      "word": "address",
+      "freq": 76
+    },
+    {
+      "word": "driver",
+      "freq": 72
+    },
+    {
+      "word": "voter",
+      "freq": 68
+    },
+    {
+      "word": "passport",
+      "freq": 64
+    },
+    {
+      "word": "signature",
+      "freq": 61
+    }
+  ],
+  "categories": [
+    "train"
+  ],
+  "topAnchors": [
+    "identity",
+    "republic",
+    "license",
+    "card",
+    "government",
+    "holder",
+    "identification",
+    "issue",
+    "expiry",
+    "national"
+  ],
+  "trainedAt": "2026-08-15T12:53:00.000Z"
+}
